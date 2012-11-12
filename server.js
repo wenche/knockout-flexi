@@ -8,10 +8,10 @@ var app = express();
 // model
 mongoose.connect('mongodb://localhost/my_database');
 
-var Todo = mongoose.model('Todo', new mongoose.Schema({
-  text: String,
-  done: Boolean,
-  order: Number
+var Time = mongoose.model('Todo', new mongoose.Schema({
+  date: String,
+  hours: Number,
+  desc: String
 }));
 
 app.configure(function(){
