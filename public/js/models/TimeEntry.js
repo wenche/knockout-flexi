@@ -8,5 +8,6 @@ define(['knockout'],
 			this.description = ko.observable(data.description);
 			this.spent = ko.observable(data.spent);
 		} 
+
 		return TimeEntry;
 	});

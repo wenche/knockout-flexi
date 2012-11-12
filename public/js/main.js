@@ -25,9 +25,9 @@ require([
 		ko.applyBindings( new YoutubeViewModel( youtubeVideos ) , $("#main")[0]);
 	});
 	*/
+	var data = {"apiVersion":"2.1","data":[{"date":"2012-11-12T13:35:14.708Z","hours": "1", "desc": "A test", "spent": "3"}]};
 
-
-  	ko.applyBindings( new ViewModel({"apiVersion":"2.1","data":{"date":"2012-11-12T13:35:14.708Z","hours": "1", "desc": "A test"}}));
+  	ko.applyBindings( new ViewModel(data));
   	
 	
   
