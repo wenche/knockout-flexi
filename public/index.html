@@ -45,8 +45,10 @@
 				  </div>		
 			</form>
 		</div>
-		<div class="alert alert-success"></div>
-		<div class="timesheet-table">
+		<div class="alert alert-success">
+			<p>Dette er en test</p>
+		</div>
+		<div class="timesheet-table" >
 			<table class="table table-hover">
 				<thead>
 					<th>Date</th>
@@ -55,9 +57,9 @@
 				</thead>
 				<tbody data-bind="foreach: registrations">
 					<tr>
-						<td data-bind="text: date()"></td>
-						<td data-bind="text: description()"></td>
-						<td data-bind="text: hours()"></td>
+						<td data-bind="text: date"></td>
+						<td data-bind="text: description"></td>
+						<td data-bind="text: hours"></td>
 					</tr>
 				</tbody>
 			</table>
