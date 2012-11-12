@@ -1,0 +1,98 @@
+.code {
+    font: 0.8em/1.6 Monaco, Mono-Space, monospace;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+a {
+    text-decoration: none;
+    color: #08C;
+    transition: all 0.3s ease-out;
+    position: relative;
+    padding: .5em;
+    margin: -.5em;
+}
+ 
+a:hover { color: #0AF; }
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+ 
+.clearfix:after {
+    clear: both;
+}
+ 
+/* IE6/7 support */
+.clearfix {
+    *zoom: 1;
+}
+
+/*
+* Skjuler ikke innhold for søkemotorer og
+* lese-verktøy. Fint for faner osv
+*/
+.visuallyhidden {
+    position: absolute;
+    width: 1px; /* Setting this to 0 make it invisible for VoiceOver */
+    height: 1px; /* Setting this to 0 make it invisible for VoiceOver */
+    padding: 0;
+    margin: -1px;
+    border: 0;
+    clip: rect(0 0 0 0);
+    overflow: hidden;    
+}
+
+/*
+* Image replacement
+*/
+.ir {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/*
+* Forhindrer f.eks. URL å bryte ut av containeren sin
+* http://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/
+*/
+
+/* Ikke Opera */
+.break {
+    -ms-word-break: break-all;
+    word-break: break-all;
+ 
+    word-break: break-word;
+ 
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+/* Ikke FF */ 
+.ellipsis {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis; /* Required for IE8 */
+    -o-text-overflow: ellipsis; /* Required for Opera */
+    text-overflow: ellipsis;
+}
+/* Tekstbryting i pre-tag */
+pre {
+    white-space: pre-wrap;       /* Chrome & Safari */
+    white-space: -moz-pre-wrap;  /* Mozilla since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
