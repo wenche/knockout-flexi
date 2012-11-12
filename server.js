@@ -8,10 +8,11 @@ var app = express();
 // model
 mongoose.connect('mongodb://localhost/my_database');
 
-var Time = mongoose.model('Todo', new mongoose.Schema({
+var Time = mongoose.model('FlexTimeEntry', new mongoose.Schema({
   date: String,
   hours: Number,
-  desc: String
+  desc: String,
+  spent: Boolean
 }));
 
 app.configure(function(){

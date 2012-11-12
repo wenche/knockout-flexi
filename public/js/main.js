@@ -26,7 +26,10 @@ require([
 	});
 	*/
 	var data = {"apiVersion":"2.1","data":[{"date":"2012-11-12T13:35:14.708Z","hours": "1", "desc": "A test", "spent": "3"}]};
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8204a9ce4256171fb7b32bf5aa7d0109eb429c3a
   	ko.applyBindings( new ViewModel(data));
   	
 	
