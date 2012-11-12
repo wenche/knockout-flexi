@@ -3,10 +3,15 @@ define(['knockout'],
 		'use strict'
 		//represent a single menu item
 		var TimeEntry = function(data){
-			this.date = ko.observable(data.date);
-			this.hours = ko.observable(data.hours);
-			this.description = ko.observable(data.description);
-			this.spent = ko.observable(data.spent);
+			var self = this;
+			self.date = ko.observable(data.date);
+			self.hours = ko.observable(data.hours);
+			self.description = ko.observable(data.description);
+			self.spent = ko.observable(data.spent);
+
+			self.isSpent = ko.computed(function() {
+				return self.spent() ? "error" : "success";
+			});
 		} 
 		return TimeEntry;
 	});

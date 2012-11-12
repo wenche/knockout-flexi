@@ -29,6 +29,31 @@ app.get('/', function(req, res){
   res.send('Hello World');
 });
 
+app.get('/api/flex', function(req, res) {
+  return Time.find(function(err, flex) {
+    return res.send(flex);
+  });
+});
+
+app.post('/api/flex', function(req, res) {
+  var entry;
+  console.log(req);
+  entry = new Time({
+    date: req.body.date,
+    hours: req.body.hours,
+    desc: req.body.description,
+    spent: req.body.spent
+  });
+
+  entry.save(function(err) {
+    if(!err) {
+      return console.log("created");
+    } else {
+      console.log(err);
+    }
+  });
+  return res.send(entry);
+});
 /*
 app.get('/todo', function(req, res){
   res.render('todo', {title: "MongoDB Backed TODO App"});
