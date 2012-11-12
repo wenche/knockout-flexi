@@ -22,29 +22,30 @@
 				<div class="control-group">
 					<label class="control-label" for="sheetDate">Date</label>
 					<div class="controls">
-						<input type="date" id="sheetDate" placeholder="dd.mm.yy">
+						<input type="date" id="sheetDate" placeholder="dd.mm.yy" data-bind="value: flexDate">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="sheetHours">Hours</label>
 					<div class="controls">
-						<input type="text" id="sheetHours" placeholder="Number of hours spent">
+						<input type="text" id="sheetHours" placeholder="Number of hours spent" data-bind="value: flexHours">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="sheetDesc">Description</label>
 					<div class="controls">
-						<textarea id="sheetDesc" placeholder="Number of hours spent"></textarea>
+						<textarea id="sheetDesc" placeholder="Number of hours spent" data-bind="value: flexDesc"></textarea>
 					</div>
 				</div>
 				<div class="control-group">
 				    <div class="controls">
-				      <button class="btn btn-success">Add</button>
-				      <button class="btn btn-danger">Spend</button>
+				      <button class="btn btn-success" data-bind="click: addFlex">Add</button>
+				      <button class="btn btn-danger" data-bind="click: spendFlex">Spend</button>
 				    </div>
 				  </div>		
 			</form>
 		</div>
+		<div class="alert alert-success"></div>
 		<div class="timesheet-table">
 			<table class="table table-hover">
 				<thead>
@@ -52,11 +53,11 @@
 					<th>Description</th>
 					<th>Hours</th>
 				</thead>
-				<tbody>
+				<tbody data-bind="foreach: registrations">
 					<tr>
-						<td>test</td>
-						<td>test</td>
-						<td>2</td>
+						<td data-bind="text: date()"></td>
+						<td data-bind="text: description()"></td>
+						<td data-bind="text: hours()"></td>
 					</tr>
 				</tbody>
 			</table>
