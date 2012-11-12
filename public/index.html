@@ -4,8 +4,6 @@
 	<meta charset="utf-8">
 	<title>Knockout.js</title>
 	<link rel="stylesheet" href="styles/tbs-2.2.1.css" />
-	<link rel="stylesheet" href="styles/tbs-responsive-2.2.1.css" />
-	<link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
 	<div class="content container">
@@ -19,6 +17,28 @@
     		</header>
 		</div>
 
+		<div class="timesheet-form">
+			<form class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label" for="sheetDate">Date</label>
+					<div class="controls">
+						<input type="date" id="sheetDate" placeholder="dd.mm.yy">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="sheetHours">Hours</label>
+					<div class="controls">
+						<input type="text" id="sheetHours" placeholder="Number of hours spent">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="sheetDesc">Description</label>
+					<div class="controls">
+						<textarea id="sheetDesc" placeholder="Number of hours spent"></textarea>
+					</div>
+				</div>				
+			</form>
+		</div>
 	</div>
 	<script type="text/javascript" data-main="../js/main" src="../js/libs/require.js"></script>
 </body>
