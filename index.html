@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Knockout.js</title>
+	<link rel="stylesheet" href="styles/tbs-2.2.1.css" />
+	<link rel="stylesheet" href="styles/tbs-responsive-2.2.1.css" />
+	<link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+	<div class="content container">
+		 <div class="header-container">
+    		<header class="main-header row">
+        		<div class="span12">
+            		<h1>Knockout boilerplate</h1>
+        		</div>
+    		</header>
+		</div>
+
+		<div class=" margin-bottom">
+    		<div class="row main">
+        		<div id="filtering" class="span2">
+        			<ul class="content-list" data-bind="foreach: menu">
+        				<li> 
+        					<a data-bind="attr: {href: text}, text: text"></a>
+        				</li>
+        			</ul>
+    			</div>
+    			<div id="main" class="span10">
+    				<h2>YouTube search</h2>
+    				<form class="form-search">
+					    <input type="text" id="search" data-bind="" class="input-medium search-query" />
+					    <button type="submit" class="btn">Search</button>
+					</form>
+					<ul class="content-list" data-bind="foreach: videos">
+						<li>
+    						<h3>
+    							<a data-bind="attr: { href: player}, text: title" target="_blank">Link</a>
+    						</h3>	
+				   			<p data-bind="text: description"></p>
+							
+						</li>
+					</ul>
+					<p><%= description %></p>
+					
+					<p>Search results: <span data-bind="text: totalItems"></span></p>
+					<div id="search_results"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" data-main="js/main" src="js/libs/require.js"></script>
+</body>
+</html>
