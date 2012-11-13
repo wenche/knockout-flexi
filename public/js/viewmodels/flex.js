@@ -90,14 +90,6 @@ define(['knockout', 'models/TimeEntry'],
 				self.registrations.remove(flex);
 			}
 
-			ko.bindingHandlers.sortDate = {
-				init: function(element, valueAccessor) {
-					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
-					});	
-				}
-			}
-
 			self.totalHours = ko.computed(function() {
    				var total = 0;
    				for (var i = 0; i < self.registrations().length; i++) {
