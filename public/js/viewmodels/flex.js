@@ -13,7 +13,33 @@ define(['knockout', 'models/TimeEntry'],
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
       			return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
-    		}));
+    			})
+
+    		);
+  			self.sortHours = function () {
+				self.registrations.sort(function(left, right) { 
+					return left.hours() == right.hours() ? 0 : (left.hours() < right.hours() ? -1 : 1) 
+				}); 
+			};
+			//Litt søkt kanskje, enklere med default søk?
+			self.sortDates = function (sort) {
+				var elem = $("#sortDate").children("i");
+				if( elem.hasClass("icon-chevron-up")){
+					elem.removeClass("icon-chevron-up").addClass("icon-chevron-down");
+					self.registrations.sort(function(left,right){
+						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+					});
+				} else {
+					//If the table is unsorted, respect this when adding a new item
+					if(!elem.hasClass("icon-chevron-down") && !sort) {
+						return;
+					}
+					elem.removeClass("icon-chevron-down").addClass("icon-chevron-up");
+					self.registrations.sort(function(left,right){
+						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+					});
+				}
+			}
 
 			self.addFlex = function() {
 				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(), description: self.flexDesc(), spent: false});
@@ -25,6 +51,7 @@ define(['knockout', 'models/TimeEntry'],
 					}
 				});
 				self.registrations.push(flex);
+				self.sortDates(false);
 				self.flexDate("");
 				self.flexDesc("");
 				self.flexHours("");
@@ -45,6 +72,8 @@ define(['knockout', 'models/TimeEntry'],
 				self.flexHours("");
 				
 				self.registrations.push(flex);
+				self.sortDates(false);
+			;
 			};
 
 			self.removeRegistration = function(flex) {
@@ -61,16 +90,21 @@ define(['knockout', 'models/TimeEntry'],
 				self.registrations.remove(flex);
 			}
 
+			ko.bindingHandlers.sortDate = {
+				init: function(element, valueAccessor) {
+					self.registrations.sort(function(left,right){
+						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+					});	
+				}
+			}
+
 			self.totalHours = ko.computed(function() {
    				var total = 0;
    				for (var i = 0; i < self.registrations().length; i++) {
-   					//parser ingenting nå
-   					var hours = self.registrations()[i].getSign();
-   					console.log(hours);
+   					var hours = parseFloat(self.registrations()[i].getSign());
        				total += hours;
        			}
-       				console.log("Total: " + total);
-   					return total;
+   				return total;
 			});
 		};
 

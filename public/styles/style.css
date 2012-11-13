@@ -98,3 +98,7 @@ td.error {
 td.success {
     background-color: #D0E9C6;
 }
+
+.clickable {
+    cursor: pointer;
+}
