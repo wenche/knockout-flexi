@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<title>Knockout.js</title>
 	<link rel="stylesheet" href="styles/tbs-2.2.1.css" />
+	<link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
 	<div class="content container">
@@ -45,8 +46,8 @@
 				  </div>		
 			</form>
 		</div>
-		<div class="alert alert-success">
-			<p>Dette er en test</p>
+		<div class="alert alert-error" data-bind="visible: totalHours() < 0">
+			<p>Ooops! Nå er du på minus-timer!</p>
 		</div>
 		<div class="timesheet-table" >
 			<table class="table table-hover">
@@ -57,13 +58,14 @@
 				</thead>
 				<tfoot>
 					<td colspan="2">Totals:</td>
-					<td ><strong data-bind="text: totalSurcharge()"></strong></td>
+					<td ><strong data-bind="text: totalHours().toFixed(2)"></strong></td>
 				</tfoot>
 				<tbody data-bind="foreach: registrations">
-					<tr data-bind="css: isSpent ">
+					<tr>
 						<td data-bind="text: date"></td>
 						<td data-bind="text: description"></td>
-						<td data-bind="text: hours"></td
+						<td data-bind="text: hours, css: isSpent"></td>
+						<td><a href="#" data-bind="click: $root.removeRegistration">X</a></td>
 					</tr>
 				</tbody>
 			</table>

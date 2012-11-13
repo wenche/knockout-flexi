@@ -54,6 +54,20 @@ app.post('/api/flex', function(req, res) {
   });
   return res.send(entry);
 });
+
+app.delete('/api/flex/:id', function(req, res){
+  console.log("Delete: " +req);
+  return Time.findById(req.params.id,function(err, flex){
+    console.log("Flex: "+ flex);
+    return flex.remove(function(err){
+      if (!err) {
+        console.log("Removed line");
+        return res.send('');
+      }
+    });
+  });
+});
+
 /*
 app.get('/todo', function(req, res){
   res.render('todo', {title: "MongoDB Backed TODO App"});

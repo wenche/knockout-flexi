@@ -12,11 +12,10 @@ define(['knockout', 'models/TimeEntry'],
 
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
-      			return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent });
+      			return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
     		}));
 
 			self.addFlex = function() {
-				console.log("added");
 				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(), description: self.flexDesc(), spent: false});
 				$.ajax("/api/flex", {
 					data: ko.toJSON(flex),
@@ -48,15 +47,29 @@ define(['knockout', 'models/TimeEntry'],
 				self.registrations.push(flex);
 			};
 
-			self.totalSurcharge = ko.computed(function() {
+			self.removeRegistration = function(flex) {
+
+				console.log("Removing line " + flex.hours() + flex.id());
+
+				$.ajax("/api/flex/" + flex.id(), {
+					data: ko.toJSON(flex),
+					type: "delete",
+					success: function(result){
+						console.log("Removed line. " + result);
+					}
+				})
+				self.registrations.remove(flex);
+			}
+
+			self.totalHours = ko.computed(function() {
    				var total = 0;
    				for (var i = 0; i < self.registrations().length; i++) {
-   					var item = self.registrations()[i];
-
-   					console.log(item.hours());
    					//parser ingenting nå
-       				total += item.getSign();
+   					var hours = self.registrations()[i].getSign();
+   					console.log(hours);
+       				total += hours;
        			}
+       				console.log("Total: " + total);
    					return total;
 			});
 		};

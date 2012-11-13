@@ -8,7 +8,7 @@ define(['knockout'],
 			self.hours = ko.observable(data.hours);
 			self.description = ko.observable(data.description);
 			self.spent = ko.observable(data.spent);
-
+			self.id = ko.observable(data.id);
 			self.isSpent = ko.computed(function() {
 				return self.spent() ? "error" : "success";
 			});

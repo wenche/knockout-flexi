@@ -18,12 +18,6 @@ a {
  
 a:hover { color: #0AF; }
 
-*, *:before, *:after {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
 .clearfix:before,
 .clearfix:after {
     content: " ";
@@ -95,4 +89,12 @@ pre {
     white-space: -pre-wrap;      /* Opera 4-6 */
     white-space: -o-pre-wrap;    /* Opera 7 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+/* TBS har bare feil-klasser på rad? */
+td.error {
+    background-color: #F2DEDE;
+}
+td.success {
+    background-color: #D0E9C6;
 }

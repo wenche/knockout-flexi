@@ -15,7 +15,7 @@ require([
   	'use strict';
 
 	$.getJSON("/api/flex", function(data) {
-		console.log(data);
+		console.log( data);
 		ko.applyBindings( new ViewModel(data));
 	});
   	
