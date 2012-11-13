@@ -47,7 +47,19 @@ define(['knockout', 'models/TimeEntry'],
 				
 				self.registrations.push(flex);
 			};
-		}
+
+			self.totalSurcharge = ko.computed(function() {
+   				var total = 0;
+   				for (var i = 0; i < self.registrations().length; i++) {
+   					var item = self.registrations()[i];
+
+   					console.log(item.hours());
+   					//parser ingenting nå
+       				total += item.getSign();
+       			}
+   					return total;
+			});
+		};
 
 		return FlexViewModel;
 	});

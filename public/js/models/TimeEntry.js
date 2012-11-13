@@ -12,6 +12,10 @@ define(['knockout'],
 			self.isSpent = ko.computed(function() {
 				return self.spent() ? "error" : "success";
 			});
+			self.getSign = ko.computed(function(){
+				return self.spent() ? -self.hours() : self.hours();
+				;
+			});	
 		} 
 
 		return TimeEntry;
