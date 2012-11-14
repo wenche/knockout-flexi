@@ -12,11 +12,11 @@ require([
 	'config/global',
 	'viewmodels/flex'
 ], function(ko, $, g, ViewModel){
-  	'use strict';
+	'use strict';
 
 	$.getJSON("/api/flex", function(data) {
 		console.log( data);
 		ko.applyBindings( new ViewModel(data));
 	});
-  	
+
 });

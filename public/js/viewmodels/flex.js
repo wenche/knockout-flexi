@@ -1,6 +1,6 @@
 define(['knockout', 'models/TimeEntry'],
 	function(ko, TimeEntry){
-		'use strict'
+		'use strict';
 
 
 		var FlexViewModel = function( regs ) {
@@ -12,14 +12,13 @@ define(['knockout', 'models/TimeEntry'],
 
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
-      			return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
-    			})
-
-    		);
-  			self.sortHours = function () {
-				self.registrations.sort(function(left, right) { 
-					return left.hours() == right.hours() ? 0 : (left.hours() < right.hours() ? -1 : 1) 
-				}); 
+				return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
+				})
+			);
+			self.sortHours = function () {
+				self.registrations.sort(function(left, right) {
+					return left.hours() == right.hours() ? 0 : (left.hours() < right.hours() ? -1 : 1);
+				});
 			};
 			//Litt søkt kanskje, enklere med default søk?
 			//@TODO: Bug, søker hver gang når man legger til flere registreringer etterhverandre
@@ -40,7 +39,7 @@ define(['knockout', 'models/TimeEntry'],
 						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
 				}
-			}
+			};
 
 			//@TODO: Validering slik at man ikke kan legge til tomme rader
 			self.addFlex = function() {
@@ -75,7 +74,6 @@ define(['knockout', 'models/TimeEntry'],
 				
 				self.registrations.push(flex);
 				self.sortDates(false);
-			;
 			};
 
 			self.removeRegistration = function(flex) {
@@ -86,19 +84,19 @@ define(['knockout', 'models/TimeEntry'],
 					data: ko.toJSON(flex),
 					type: "delete",
 					success: function(result){
-						console.log("Removed line. " + result);
+						console.log("Removed line. " t+ result);
 					}
-				})
+				});
 				self.registrations.remove(flex);
-			}
+			};
 
 			self.totalHours = ko.computed(function() {
-   				var total = 0;
-   				for (var i = 0; i < self.registrations().length; i++) {
-   					var hours = parseFloat(self.registrations()[i].getSign());
-       				total += hours;
-       			}
-   				return total;
+				var total = 0;
+				for (var i = 0; i < self.registrations().length; i++) {
+					var hours = parseFloat(self.registrations()[i].getSign());
+					total += hours;
+				}
+				return total;
 			});
 		};
 
