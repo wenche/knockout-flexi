@@ -22,6 +22,7 @@ define(['knockout', 'models/TimeEntry'],
 				}); 
 			};
 			//Litt søkt kanskje, enklere med default søk?
+			//@TODO: Bug, søker hver gang når man legger til flere registreringer etterhverandre
 			self.sortDates = function (sort) {
 				var elem = $("#sortDate").children("i");
 				if( elem.hasClass("icon-chevron-up")){
@@ -41,6 +42,7 @@ define(['knockout', 'models/TimeEntry'],
 				}
 			}
 
+			//@TODO: Validering slik at man ikke kan legge til tomme rader
 			self.addFlex = function() {
 				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(), description: self.flexDesc(), spent: false});
 				$.ajax("/api/flex", {
