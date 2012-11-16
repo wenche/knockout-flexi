@@ -1,5 +1,5 @@
-define(['knockout', 'models/TimeEntry'],
-	function(ko, TimeEntry){
+define(['knockout', 'models/TimeEntry', 'config/global'],
+	function(ko, TimeEntry, g){
 		'use strict'
 
 
@@ -16,30 +16,35 @@ define(['knockout', 'models/TimeEntry'],
     			})
 
     		);
-  			self.sortHours = function () {
-				self.registrations.sort(function(left, right) { 
-					return left.hours() == right.hours() ? 0 : (left.hours() < right.hours() ? -1 : 1) 
-				}); 
-			};
-			//Litt søkt kanskje, enklere med default søk?
-			//@TODO: Bug, søker hver gang når man legger til flere registreringer etterhverandre
+  		
 			self.sortDates = function (sort) {
 				var elem = $("#sortDate").children("i");
-				if( elem.hasClass("icon-chevron-up")){
-					elem.removeClass("icon-chevron-up").addClass("icon-chevron-down");
-					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
-					});
-				} else {
-					//If the table is unsorted, respect this when adding a new item
-					if(!elem.hasClass("icon-chevron-down") && !sort) {
-						return;
-					}
-					elem.removeClass("icon-chevron-down").addClass("icon-chevron-up");
+				if ( elem.hasClass(g.sortUp) ){
 					self.registrations.sort(function(left,right){
 						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
+					elem.removeClass(g.sortUp).addClass(g.sortDown);	
+				} else {
+					elem.removeClass(g.sortDown).addClass(g.sortUp);
+					self.registrations.sort(function(left,right){
+						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+					});
 				}
+			};
+
+			// RY is the new DRY, eller Wenche er lei
+			self.insertDates = function () {
+				var elem = $("#sortDate").children("i");
+				if (elem.hasClass(g.sortUp) ){
+					self.registrations.sort(function(left,right){
+						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+					});
+				}
+				else if (elem.hasClass(g.sortDown)) {
+					self.registrations.sort(function(left,right){
+						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+					});
+				};
 			}
 
 			//@TODO: Validering slik at man ikke kan legge til tomme rader
@@ -53,7 +58,7 @@ define(['knockout', 'models/TimeEntry'],
 					}
 				});
 				self.registrations.push(flex);
-				self.sortDates(false);
+				self.insertDates();
 				self.flexDate("");
 				self.flexDesc("");
 				self.flexHours("");
@@ -74,7 +79,7 @@ define(['knockout', 'models/TimeEntry'],
 				self.flexHours("");
 				
 				self.registrations.push(flex);
-				self.sortDates(false);
+				self.insertDates();
 			;
 			};
 
