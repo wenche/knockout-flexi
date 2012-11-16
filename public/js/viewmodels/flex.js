@@ -12,20 +12,19 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
 				return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
-				})
-			);
+			}));
 
 			self.sortDates = function (sort) {
 				var elem = $("#sortDate").children("i");
 				if ( elem.hasClass(g.sortUp) ){
 					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+						return left.date() === right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
 					elem.removeClass(g.sortUp).addClass(g.sortDown);	
 				} else {
 					elem.removeClass(g.sortDown).addClass(g.sortUp);
 					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+						return left.date() === right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
 					});
 				}
 			};
@@ -35,12 +34,12 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 				var elem = $("#sortDate").children("i");
 				if (elem.hasClass(g.sortUp) ){
 					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+						return left.date() === right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
 					});
 				}
 				else if (elem.hasClass(g.sortDown)) {
 					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+						return left.date() === right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
 				};
 			};
@@ -89,7 +88,7 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 					data: ko.toJSON(flex),
 					type: "delete",
 					success: function(result){
-						console.log("Removed line. " t+ result);
+						console.log("Removed line. " + result);
 					}
 				});
 				self.registrations.remove(flex);
