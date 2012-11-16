@@ -1,7 +1,6 @@
 define(['knockout', 'models/TimeEntry', 'config/global'],
 	function(ko, TimeEntry, g){
-		'use strict'
-
+		'use strict';
 
 		var FlexViewModel = function( regs ) {
 			var self = this;
@@ -12,11 +11,10 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
-      			return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
-    			})
+				return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
+				})
+			);
 
-    		);
-  		
 			self.sortDates = function (sort) {
 				var elem = $("#sortDate").children("i");
 				if ( elem.hasClass(g.sortUp) ){
@@ -45,7 +43,7 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
 				};
-			}
+			};
 
 			//@TODO: Validering slik at man ikke kan legge til tomme rader
 			self.addFlex = function() {
@@ -80,7 +78,7 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 				
 				self.registrations.push(flex);
 				self.insertDates();
-			;
+
 			};
 
 			self.removeRegistration = function(flex) {
@@ -91,19 +89,19 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 					data: ko.toJSON(flex),
 					type: "delete",
 					success: function(result){
-						console.log("Removed line. " + result);
+						console.log("Removed line. " t+ result);
 					}
-				})
+				});
 				self.registrations.remove(flex);
-			}
+			};
 
 			self.totalHours = ko.computed(function() {
-   				var total = 0;
-   				for (var i = 0; i < self.registrations().length; i++) {
-   					var hours = parseFloat(self.registrations()[i].getSign());
-       				total += hours;
-       			}
-   				return total;
+				var total = 0;
+				for (var i = 0; i < self.registrations().length; i++) {
+					var hours = parseFloat(self.registrations()[i].getSign());
+					total += hours;
+				}
+				return total;
 			});
 		};
 

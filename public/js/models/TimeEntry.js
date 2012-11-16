@@ -1,6 +1,7 @@
-define(['knockout'], 
+define(['knockout'],
 	function(ko){
-		'use strict'
+		'use strict';
+
 		//represent a single menu item
 		var TimeEntry = function(data){
 			var self = this;
@@ -14,9 +15,8 @@ define(['knockout'],
 			});
 			self.getSign = ko.computed(function(){
 				return self.spent() ? -self.hours() : self.hours();
-				;
-			});	
-		} 
+			});
+		};
 
 		return TimeEntry;
 	});
