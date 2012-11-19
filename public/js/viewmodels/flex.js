@@ -1,6 +1,14 @@
-define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation'],
+define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'tooltip'],
 	function(ko, TimeEntry, g){
 		'use strict';
+
+		ko.validation.configure({
+		    registerExtenders: true,
+		    messagesOnModified: false,
+		    insertMessages: false,
+		    parseInputAttributes: true,
+		    messageTemplate: null
+		});
 
 		var FlexViewModel = function( regs ) {
 			var self = this;
@@ -68,6 +76,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation'],
 						self.flexDate("");
 						self.flexDesc("");
 						self.flexHours("");
+						self.errors.showAllMessages(false);
 
 						self.registrations.push(flex);
 						self.insertDates();
@@ -91,6 +100,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation'],
 						self.flexDate("");
 						self.flexDesc("");
 						self.flexHours("");
+						self.errors.showAllMessages(false);
 
 						self.registrations.push(flex);
 						self.insertDates();
@@ -117,6 +127,24 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation'],
 				}
 				return total;
 			});
+
+			ko.bindingHandlers.FlexValidationMsg = {
+				init: function(element, valueAccessor, allBindingsAccessor, viewmodel) {
+					var observable = valueAccessor(), $element = $(element);
+					if(observable.isValid) {
+						observable.isValid.subscribe(function(valid) {
+							if(!valid) {
+								$element.addClass('validation-error');
+								$element.tooltip({ placement: 'right', title: observable.error, trigger: 'manual' });
+								$element.tooltip('show');
+							} else {
+								$element.tooltip('destroy');
+								$element.removeClass('validation-error');
+							}
+						});
+					}
+				}
+			}
 		};
 
 		return FlexViewModel;

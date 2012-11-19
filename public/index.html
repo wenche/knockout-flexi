@@ -23,13 +23,13 @@
 				<div class="control-group">
 					<label class="control-label" for="sheetDate">Date</label>
 					<div class="controls">
-						<input type="date" id="sheetDate" placeholder="dd.mm.yy" data-bind="value: flexDate">
+						<input type="date" id="sheetDate" placeholder="dd.mm.yy" data-bind="value: flexDate, FlexValidationMsg: flexDate" >
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="sheetHours">Hours</label>
 					<div class="controls">
-						<input type="text" id="sheetHours" placeholder="Number of hours spent" data-bind="value: flexHours">
+						<input type="text" id="sheetHours" placeholder="Number of hours spent" data-bind="value: flexHours, FlexValidationMsg: flexHours">
 					</div>
 				</div>
 				<div class="control-group">

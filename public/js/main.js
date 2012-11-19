@@ -2,7 +2,8 @@ require.config({
 	paths: {
 		knockout: 'libs/knockout-2.2.0',
 		jquery: 'libs/jquery.min',
-		ko_validation: 'libs/knockout.validation'
+		ko_validation: 'libs/knockout.validation',
+		tooltip: 'libs/bootstrap-tooltip'
 	}
 
 });
