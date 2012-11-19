@@ -1,7 +1,6 @@
-define(['knockout', 'models/TimeEntry'],
-	function(ko, TimeEntry){
+define(['knockout', 'models/TimeEntry', 'config/global'],
+	function(ko, TimeEntry, g){
 		'use strict';
-
 
 		var FlexViewModel = function( regs ) {
 			var self = this;
@@ -13,32 +12,36 @@ define(['knockout', 'models/TimeEntry'],
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
 				return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
-				})
-			);
-			self.sortHours = function () {
-				self.registrations.sort(function(left, right) {
-					return left.hours() == right.hours() ? 0 : (left.hours() < right.hours() ? -1 : 1);
-				});
-			};
-			//Litt søkt kanskje, enklere med default søk?
-			//@TODO: Bug, søker hver gang når man legger til flere registreringer etterhverandre
+			}));
+
 			self.sortDates = function (sort) {
 				var elem = $("#sortDate").children("i");
-				if( elem.hasClass("icon-chevron-up")){
-					elem.removeClass("icon-chevron-up").addClass("icon-chevron-down");
+				if ( elem.hasClass(g.sortUp) ){
 					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+						return left.date() === right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
+					elem.removeClass(g.sortUp).addClass(g.sortDown);	
 				} else {
-					//If the table is unsorted, respect this when adding a new item
-					if(!elem.hasClass("icon-chevron-down") && !sort) {
-						return;
-					}
-					elem.removeClass("icon-chevron-down").addClass("icon-chevron-up");
+					elem.removeClass(g.sortDown).addClass(g.sortUp);
 					self.registrations.sort(function(left,right){
-						return left.date() == right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+						return left.date() === right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
 					});
 				}
+			};
+
+			// RY is the new DRY, eller Wenche er lei
+			self.insertDates = function () {
+				var elem = $("#sortDate").children("i");
+				if (elem.hasClass(g.sortUp) ){
+					self.registrations.sort(function(left,right){
+						return left.date() === right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+					});
+				}
+				else if (elem.hasClass(g.sortDown)) {
+					self.registrations.sort(function(left,right){
+						return left.date() === right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+					});
+				};
 			};
 
 			//@TODO: Validering slik at man ikke kan legge til tomme rader
@@ -52,7 +55,7 @@ define(['knockout', 'models/TimeEntry'],
 					}
 				});
 				self.registrations.push(flex);
-				self.sortDates(false);
+				self.insertDates();
 				self.flexDate("");
 				self.flexDesc("");
 				self.flexHours("");
@@ -73,7 +76,8 @@ define(['knockout', 'models/TimeEntry'],
 				self.flexHours("");
 				
 				self.registrations.push(flex);
-				self.sortDates(false);
+				self.insertDates();
+
 			};
 
 			self.removeRegistration = function(flex) {
@@ -84,7 +88,7 @@ define(['knockout', 'models/TimeEntry'],
 					data: ko.toJSON(flex),
 					type: "delete",
 					success: function(result){
-						console.log("Removed line. " t+ result);
+						console.log("Removed line. " + result);
 					}
 				});
 				self.registrations.remove(flex);

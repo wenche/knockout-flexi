@@ -57,7 +57,7 @@ app.post('/api/flex', function(req, res) {
 
 app.delete('/api/flex/:id', function(req, res){
   console.log("Delete: " +req);
-  return Time.findById(req.params.id,function(err, flex){
+  return Time.findById(req.params.id, function(err, flex){
     console.log("Flex: "+ flex);
     return flex.remove(function(err){
       if (!err) {
