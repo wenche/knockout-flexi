@@ -203,9 +203,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 				            text: 'Balanse'
 				         },
 				         xAxis: {
-				         	title: {
-				         		text: 'Type'
-				         	}
+				         	categories: ["Type"]
 				         },
 				         yAxis: {
 				            title: {
