@@ -1,5 +1,5 @@
-define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'tooltip', 'highcharts'],
-	function(ko, TimeEntry, g, val, tt, Highcharts){
+define(['knockout', 'models/TimeEntry', 'config/global', 'highcharts', 'ko_validation', 'tooltip' ],
+	function(ko, TimeEntry, g, Highcharts){
 		'use strict';
 
 		ko.validation.configure({
@@ -205,9 +205,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 				            text: 'Balanse'
 				         },
 				         xAxis: {
-				         	title: {
-				         		text: 'Type'
-				         	}
+				         	categories: ["Type"]
 				         },
 				         yAxis: {
 				            title: {
