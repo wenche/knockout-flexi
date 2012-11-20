@@ -1,30 +1,43 @@
-define(['knockout', 'models/TimeEntry', 'config/global'],
+define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'tooltip'],
 	function(ko, TimeEntry, g){
 		'use strict';
+
+		ko.validation.configure({
+		    registerExtenders: true,
+		    messagesOnModified: false,
+		    insertMessages: false,
+		    parseInputAttributes: true,
+		    messageTemplate: null
+		});
 
 		var FlexViewModel = function( regs ) {
 			var self = this;
 
-			self.flexDate = ko.observable();
-			self.flexHours = ko.observable();
+			self.flexDate = ko.observable().extend({ required: true });
+			self.flexHours = ko.observable().extend({ required: true });
 			self.flexDesc = ko.observable();
+
+			self.errors = ko.validation.group(self);
 
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
 				console.log(registration);
-				return new TimeEntry({ date: registration.date, hours: registration.hours, description: registration.desc, spent: registration.spent, id: registration._id });
+				return new TimeEntry({ date: registration.date, hours: registration.hours,
+					description: registration.desc, spent: registration.spent, id: registration._id });
 			}));
 
 			self.sortDates = function (sort) {
 				var elem = $("#sortDate").children("i");
 				if ( elem.hasClass(g.sortUp) ){
 					self.registrations.sort(function(left,right){
-						return left.date() === right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+						return left.date() === right.date()
+							? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
-					elem.removeClass(g.sortUp).addClass(g.sortDown);	
+					elem.removeClass(g.sortUp).addClass(g.sortDown);
 				} else {
 					elem.removeClass(g.sortDown).addClass(g.sortUp);
 					self.registrations.sort(function(left,right){
-						return left.date() === right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+						return left.date() === right.date()
+							? 0 : (left.date() > right.date() ? -1 : 1 );
 					});
 				}
 			};
@@ -34,56 +47,74 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 				var elem = $("#sortDate").children("i");
 				if (elem.hasClass(g.sortUp) ){
 					self.registrations.sort(function(left,right){
-						return left.date() === right.date() ? 0 : (left.date() > right.date() ? -1 : 1 );
+						return left.date() === right.date()
+							? 0 : (left.date() > right.date() ? -1 : 1 );
 					});
 				}
 				else if (elem.hasClass(g.sortDown)) {
 					self.registrations.sort(function(left,right){
-						return left.date() === right.date() ? 0 : (left.date() < right.date() ? -1 : 1 );
+						return left.date() === right.date()
+							? 0 : (left.date() < right.date() ? -1 : 1 );
 					});
 				};
 			};
 
+			self.hasErrors = function() {
+				if(self.errors().length > 0) {
+					self.errors.showAllMessages();
+					self.flexDate.isValid.notifySubscribers(self.flexDate.isValid());
+					self.flexHours.isValid.notifySubscribers(self.flexHours.isValid());
+					return true;
+				}
+				return false;
+			};
+
 			//@TODO: Validering slik at man ikke kan legge til tomme rader
 			self.addFlex = function() {
-				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(), description: self.flexDesc(), spent: false});
+				if(self.hasErrors())
+					return;
+
+				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(),
+					description: self.flexDesc(), spent: false});
 				$.ajax("/api/flex", {
 					data: ko.toJSON(flex),
 					type: "post", contentType: "application/json",
 					success: function(result) {
 						console.log(result);
+						self.flexDate("");
+						self.flexDesc("");
+						self.flexHours("");
+						self.errors.showAllMessages(false);
+
+						self.registrations.push(flex);
+						self.insertDates();
 					}
 				});
-				self.registrations.push(flex);
-				self.insertDates();
-				self.flexDate("");
-				self.flexDesc("");
-				self.flexHours("");
 			};
 
 			self.spendFlex = function() {
-				console.log("spent");
-				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(), description: self.flexDesc(), spent: true});
+				if(self.hasErrors())
+					return;
+
+				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(),
+					description: self.flexDesc(), spent: true});
 				$.ajax("/api/flex", {
 					data: ko.toJSON(flex),
 					type: "post", contentType: "application/json",
 					success: function(result) {
 						console.log(result);
+						self.flexDate("");
+						self.flexDesc("");
+						self.flexHours("");
+						self.errors.showAllMessages(false);
+
+						self.registrations.push(flex);
+						self.insertDates();
 					}
 				});
-				self.flexDate("");
-				self.flexDesc("");
-				self.flexHours("");
-				
-				self.registrations.push(flex);
-				self.insertDates();
-
 			};
 
 			self.removeRegistration = function(flex) {
-
-				console.log("Removing line " + flex.hours() + flex.id());
-
 				$.ajax("/api/flex/" + flex.id(), {
 					data: ko.toJSON(flex),
 					type: "delete",
@@ -102,6 +133,28 @@ define(['knockout', 'models/TimeEntry', 'config/global'],
 				}
 				return total;
 			});
+
+			ko.bindingHandlers.FlexValidationMsg = {
+				update: function(element, valueAccessor, allBindingsAccessor, viewmodel) {
+					var observable = valueAccessor(), $element = $(element);
+					if(observable.isValid) {
+						observable.isValid.subscribe(function(valid) {
+							console.log("valid: " + valid);
+							console.log("observable: " + observable);
+							console.log("el: " + $element);
+							console.log("error: " + observable.error);
+							if(!valid) {
+								$element.addClass('validation-error');
+								$element.tooltip({ placement: 'right', title: observable.error, trigger: 'manual' });
+								$element.tooltip('show');
+							} else {
+								$element.tooltip('destroy');
+								$element.removeClass('validation-error');
+							}
+						});
+					}
+				}
+			}
 		};
 
 		return FlexViewModel;

@@ -38,6 +38,8 @@ app.get('/api/flex', function(req, res) {
 app.post('/api/flex', function(req, res) {
   var entry;
   console.log(req);
+  if(!req.body.date || !req.body.hours)
+    return res.send('Date or hours is missing', 500);
   entry = new Time({
     date: req.body.date,
     hours: req.body.hours,
