@@ -3,7 +3,14 @@ require.config({
 		knockout: 'libs/knockout-2.2.0',
 		jquery: 'libs/jquery.min',
 		ko_validation: 'libs/knockout.validation',
-		tooltip: 'libs/bootstrap-tooltip'
+		tooltip: 'libs/bootstrap-tooltip',
+		highcharts: 'libs/highcharts'
+	},
+	shim : {
+		highcharts : {
+			exports : 'Highcharts', 
+			deps : ['jquery']
+		}	
 	}
 
 });

@@ -1,5 +1,5 @@
-define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'tooltip'],
-	function(ko, TimeEntry, g){
+define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'tooltip', 'highcharts'],
+	function(ko, TimeEntry, g, val, tt, Highcharts){
 		'use strict';
 
 		ko.validation.configure({
@@ -16,7 +16,9 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 			self.flexDate = ko.observable().extend({ required: true });
 			self.flexHours = ko.observable().extend({ required: true });
 			self.flexDesc = ko.observable();
-
+			self.chart;
+			self.spent = 0;
+			self.worked = 0;
 			self.errors = ko.validation.group(self);
 
 			self.registrations =  ko.observableArray(ko.utils.arrayMap( regs, function( registration ) {
@@ -81,6 +83,8 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 					type: "post", contentType: "application/json",
 					success: function(result) {
 						console.log(result);
+						self.worked +=  parseFloat(self.flexHours());
+						self.chart.series[1].setData([self.worked]);
 						self.flexDate("");
 						self.flexDesc("");
 						self.flexHours("");
@@ -103,6 +107,8 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 					type: "post", contentType: "application/json",
 					success: function(result) {
 						console.log(result);
+						self.spent +=  parseFloat(self.flexHours());
+						self.chart.series[0].setData([self.spent]);
 						self.flexDate("");
 						self.flexDesc("");
 						self.flexHours("");
@@ -122,6 +128,14 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 						console.log("Removed line. " + result);
 					}
 				});
+				if(flex.spent()){
+					self.spent -=  parseFloat(flex.hours());
+					self.chart.series[0].setData([self.spent]);
+				}
+				else {
+					self.worked -=  parseFloat(flex.hours());
+					self.chart.series[1].setData([self.worked]);
+				}
 				self.registrations.remove(flex);
 			};
 
@@ -153,6 +167,53 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 							}
 						});
 					}
+				}
+			}
+			var series = function() {
+				self.worked = 0;
+				self.spent = 0;
+				for (var i = 0; i < self.registrations().length; i++) {
+					var hours = parseFloat(self.registrations()[i].hours());
+					if(self.registrations()[i].spent()){
+						self.spent += hours;
+					} else 
+					{
+						self.worked += hours;
+					}
+				}
+				return [{
+        					name: 'Brukt',
+					        data: [self.spent]
+					    },
+					    {
+					    	name: 'Arbeidet',
+					    	data: [self.worked]
+				    	}];
+			};
+
+			ko.bindingHandlers.highcharts = {
+				
+				init: function(element) {
+					self.chart = new Highcharts.Chart({
+         				chart: {
+            				renderTo: element,
+            				type: 'column'
+         				},
+				         title: {
+				            text: 'Balanse'
+				         },
+				         xAxis: {
+				         	title: {
+				         		text: 'Type'
+				         	}
+				         },
+				         yAxis: {
+				            title: {
+				               text: 'Timer'
+				            }
+				         },
+				         series: series()
+      				});
 				}
 			}
 		};
