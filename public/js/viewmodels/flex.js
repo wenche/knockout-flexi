@@ -59,12 +59,20 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 				};
 			};
 
-			//@TODO: Validering slik at man ikke kan legge til tomme rader
-			self.addFlex = function() {
+			self.hasErrors = function() {
 				if(self.errors().length > 0) {
 					self.errors.showAllMessages();
-					return;
+					self.flexDate.isValid.notifySubscribers(self.flexDate.isValid());
+					self.flexHours.isValid.notifySubscribers(self.flexHours.isValid());
+					return true;
 				}
+				return false;
+			};
+
+			//@TODO: Validering slik at man ikke kan legge til tomme rader
+			self.addFlex = function() {
+				if(self.hasErrors())
+					return;
 
 				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(),
 					description: self.flexDesc(), spent: false});
@@ -85,10 +93,8 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 			};
 
 			self.spendFlex = function() {
-				if(self.errors().length > 0) {
-					self.errors.showAllMessages();
+				if(self.hasErrors())
 					return;
-				}
 
 				var flex = new TimeEntry({ date: self.flexDate(), hours: self.flexHours(),
 					description: self.flexDesc(), spent: true});
@@ -129,10 +135,14 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 			});
 
 			ko.bindingHandlers.FlexValidationMsg = {
-				init: function(element, valueAccessor, allBindingsAccessor, viewmodel) {
+				update: function(element, valueAccessor, allBindingsAccessor, viewmodel) {
 					var observable = valueAccessor(), $element = $(element);
 					if(observable.isValid) {
 						observable.isValid.subscribe(function(valid) {
+							console.log("valid: " + valid);
+							console.log("observable: " + observable);
+							console.log("el: " + $element);
+							console.log("error: " + observable.error);
 							if(!valid) {
 								$element.addClass('validation-error');
 								$element.tooltip({ placement: 'right', title: observable.error, trigger: 'manual' });
