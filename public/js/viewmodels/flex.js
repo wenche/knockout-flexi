@@ -13,8 +13,8 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 		var FlexViewModel = function( regs ) {
 			var self = this;
 
-			self.flexDate = ko.observable().extend({ required: true });
-			self.flexHours = ko.observable().extend({ required: true });
+			self.flexDate = ko.observable().extend({ required: true, date: true });
+			self.flexHours = ko.observable().extend({ required: true, number: true});
 			self.flexDesc = ko.observable();
 			self.chart;
 			self.spent = 0;
@@ -61,11 +61,11 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 				};
 			};
 
-			self.hasErrors = function() {
+			self.hasErrors = function(options) {
 				if(self.errors().length > 0) {
 					self.errors.showAllMessages();
-					self.flexDate.isValid.notifySubscribers(self.flexDate.isValid());
-					self.flexHours.isValid.notifySubscribers(self.flexHours.isValid());
+					self.flexDate.isValid.notifySubscribers(options ? options.hideErrors : self.flexDate.isValid());
+					self.flexHours.isValid.notifySubscribers(options ? options.hideErrors : self.flexHours.isValid());
 					return true;
 				}
 				return false;
@@ -89,6 +89,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 						self.flexDesc("");
 						self.flexHours("");
 						self.errors.showAllMessages(false);
+						self.hasErrors({ hideErrors: true })
 
 						self.registrations.push(flex);
 						self.insertDates();
@@ -113,6 +114,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 						self.flexDesc("");
 						self.flexHours("");
 						self.errors.showAllMessages(false);
+						self.hasErrors({ hideErrors: true });
 
 						self.registrations.push(flex);
 						self.insertDates();
@@ -176,7 +178,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 					var hours = parseFloat(self.registrations()[i].hours());
 					if(self.registrations()[i].spent()){
 						self.spent += hours;
-					} else 
+					} else
 					{
 						self.worked += hours;
 					}
@@ -192,7 +194,7 @@ define(['knockout', 'models/TimeEntry', 'config/global', 'ko_validation', 'toolt
 			};
 
 			ko.bindingHandlers.highcharts = {
-				
+
 				init: function(element) {
 					self.chart = new Highcharts.Chart({
          				chart: {
